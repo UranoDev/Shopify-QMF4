@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/">
+    <SOAP-ENV:Body>
+        <ns2588:RequestXMLCFDI xmlns:ns2588="http://tempuri.org">
+            <USUARIO>BUT0_BUT040323MY1</USUARIO>
+            <STATUS>ALMACENAR</STATUS>
+            <Order>
+                <RFC>XAXX010101000</RFC>
+                <SellerOrderId>RT-00000303</SellerOrderId>
+                <PurchaseDate>2021-9-7</PurchaseDate>
+                <OrderStatus>Shipped</OrderStatus>
+                <SalesChannel>WooCommerce</SalesChannel>
+                <OrderTotal>
+                    <CurrencyCode>MXN</CurrencyCode>
+                    <Amount>0.02</Amount>
+                </OrderTotal>
+                <NumberOfItemsShipped>2</NumberOfItemsShipped>
+                <BuyerEmail>info@asdf.com</BuyerEmail>
+                <BuyerName>VENTAS AL PUBLICO EN GENERAL</BuyerName>
+                <UsoCFDI>G03</UsoCFDI>
+                <FormaPago>01</FormaPago>
+            </Order>
+            <ListOrderItemsResponse>
+                <ListOrderItemsResult>
+                    <OrderItems>
+                        <OrderItem>
+                            <ASIN>KITANTIGENO</ASIN>
+                            <Title>PRUEBA ANTIGENO</Title>
+                            <QuantityShipped>1.00</QuantityShipped>
+                            <ItemPrice>
+                                <Amount>0.01</Amount>
+                            </ItemPrice>
+                            <ShippingPrice>
+                                <Amount>0.00</Amount>
+                            </ShippingPrice>
+                            <PromotionDiscount>
+                                <Amount>0.00</Amount>
+                            </PromotionDiscount>
+                        </OrderItem>
+                        <OrderItem>
+                            <ASIN>KITABBOT</ASIN>
+                            <Title>PRUEBA RAPIDA ANTICUERPOS ABBOTT</Title>
+                            <QuantityShipped>1.00</QuantityShipped>
+                            <ItemPrice>
+                                <Amount>0.01</Amount>
+                            </ItemPrice>
+                            <ShippingPrice>
+                                <Amount>0.00</Amount>
+                            </ShippingPrice>
+                            <PromotionDiscount>
+                                <Amount>0.00</Amount>
+                            </PromotionDiscount>
+                        </OrderItem>
+
+                        QuantityOrdered
+                    </OrderItems>
+                </ListOrderItemsResult>
+            </ListOrderItemsResponse>
+        </ns2588:RequestXMLCFDI>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

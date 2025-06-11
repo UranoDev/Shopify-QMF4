@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Body><ns1565:PRODUCTOS xmlns:ns1565="http://tempuri.org"><CodProducto>PRUEBANUEVA</CodProducto>
+<NombreProducto>PRUEBA NUEVA</NombreProducto>
+<ClaveProdServ>25174800</ClaveProdServ>
+<Unidad>Pieza</Unidad>
+<CodProductoMarketPlace>6973A</CodProductoMarketPlace>
+<ClaveUnidad>H87</ClaveUnidad>
+<RFC>BUT0_BUT040323MY1</RFC>
+<valuename></valuename>
+<sku>PRUEBA</sku></ns1565:PRODUCTOS></SOAP-ENV:Body></SOAP-ENV:Envelope>

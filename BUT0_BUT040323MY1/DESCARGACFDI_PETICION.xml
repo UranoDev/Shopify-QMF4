@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Body><ns8616:DESCARGACFDI xmlns:ns8616="http://tempuri.org"><FECHA1>2021-10-04</FECHA1>
+<FECHA2></FECHA2>
+<TOKEN></TOKEN>
+<CODE>HTMLENCODE</CODE>
+<RFC>BUT0_BUT040323MY1</RFC>
+<tipocomprobante>F</tipocomprobante></ns8616:DESCARGACFDI></SOAP-ENV:Body></SOAP-ENV:Envelope>

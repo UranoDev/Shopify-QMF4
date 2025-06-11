@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order xmlns="https://mws.amazonservices.com/Orders/2013-09-01">
+    <RFC>XAXX010101000</RFC>
+    <NombreReceptor/>
+    <RegimenFiscalReceptor/>
+    <codigoPostal/>
+    <AmazonOrderId>500</AmazonOrderId>
+    <SellerOrderId>500</SellerOrderId>
+    <PurchaseDate>2025-04-15</PurchaseDate>
+    <OrderStatus>Completed</OrderStatus>
+    <SalesChannel>WooCommerce</SalesChannel>
+    <OrderTotal>
+        <CurrencyCode>MXN</CurrencyCode>
+        <Amount>616.00</Amount>
+    </OrderTotal>
+    <NumberOfItemsShipped>1</NumberOfItemsShipped>
+    <BuyerName>Edgar Cabrera</BuyerName>
+    <BuyerEmail>ecabrera21@hotmail.com</BuyerEmail>
+    <UsoCFDI>G03</UsoCFDI>
+    <FormaPago>31
+    </FormaPago> <!--AComienzan el xml de conceptos--><!--AComienzan el xml de conceptos--><!--AComienzan el xml de conceptos--><!--AComienzan el xml de conceptos--><!--AComienzan el xml de conceptos-->
+    <ListOrderItemsResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01">
+        <ListOrderItemsResult>
+            <AmazonOrderId>500</AmazonOrderId>
+            <OrderItems>
+                <OrderItem>
+                    <ASIN>232</ASIN>
+                    <Title>Smart Watch + Earphones smart Wristcase</Title>
+                    <QuantityShipped>1</QuantityShipped>
+                    <ItemPrice>
+                        <Amount>500</Amount>
+                    </ItemPrice>
+                    <ShippingPrice>
+                        <Amount/>
+                    </ShippingPrice>
+                    <PromotionDiscount>
+                        <Amount>0</Amount>
+                    </PromotionDiscount>
+                    <Impuestos>
+                        <Traslados>
+                            <Traslado>
+                                <Impuesto>002</Impuesto>
+                                <TipoFactor>Tasa</TipoFactor>
+                                <TasaOCuota>0.16</TasaOCuota>
+                            </Traslado>
+                        </Traslados>
+                    </Impuestos>
+                    <QuantityOrdered>1</QuantityOrdered>
+                </OrderItem>
+                <OrderItem>
+                    <ASIN>01Ship</ASIN>
+                    <Title>Gastos de Envío</Title>
+                    <QuantityShipped>1</QuantityShipped>
+                    <ItemPrice>
+                        <Amount>116</Amount>
+                    </ItemPrice>
+                    <ShippingPrice>
+                        <Amount/>
+                    </ShippingPrice>
+                    <PromotionDiscount>
+                        <Amount/>
+                    </PromotionDiscount>
+                    <Impuestos>
+                        <Traslados>
+                            <Traslado>
+                                <Impuesto>002</Impuesto>
+                                <TipoFactor>Tasa</TipoFactor>
+                                <TasaOCuota>0.16</TasaOCuota>
+                            </Traslado>
+                        </Traslados>
+                    </Impuestos>
+                    <QuantityOrdered>1</QuantityOrdered>
+                </OrderItem>
+            </OrderItems>
+        </ListOrderItemsResult>
+    </ListOrderItemsResponse>
+    <!--CFDI FISCAL--><!--CFDI FISCAL--><!--CFDI FISCAL--><!--CFDI FISCAL--><!--CFDI FISCAL-->
+    <cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.nosotros.com.mx/addendas http://www.nosotros.com.mx/addendas/RIBONONEW1.xsd http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioEmisor http://www.pegasotecnologia.com/secfd/schemas/AddendaDomicilioEmisor.xsd http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioExpedidoEn http://www.pegasotecnologia.com/secfd/schemas/AddendaDomicilioExpedidoEn.xsd http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioReceptor http://www.pegasotecnologia.com/secfd/schemas/AddendaDomicilioReceptor.xsd"
+                      Version="4.0" Fecha="2025-04-21T18:20:05" Moneda="MXN" TipoCambio="1" SubTotal="570.37"
+                      Total="616.00" FormaPago="02" CondicionesDePago="Inmediato" TipoDeComprobante="I" MetodoPago="PUE"
+                      LugarExpedicion="11520" NoCertificado="30001000000500003444" Exportacion="01" Serie="A"
+                      Folio="253"
+                      Certificado="MIIFoTCCA4mgAwIBAgIUMzAwMDEwMDAwMDA1MDAwMDM0NDQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWxpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMjMwNTE4MTM1MjIzWhcNMjcwNTE4MTM1MjIzWjCByDEiMCAGA1UEAxMZSklNRU5FWiBFU1RSQURBIFNBTEFTIEEgQTEiMCAGA1UEKRMZSklNRU5FWiBFU1RSQURBIFNBTEFTIEEgQTEiMCAGA1UEChMZSklNRU5FWiBFU1RSQURBIFNBTEFTIEEgQTElMCMGA1UELRMcSkVTOTAwMTA5UTkwIC8gVkFEQTgwMDkyN0RKMzEeMBwGA1UEBRMVIC8gVkFEQTgwMDkyN0hTUlNSTDA1MRMwEQYDVQQLEwpTdWN1cnNhbCAyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiCXqWezB86LQauOQR0kCeowaCnqRb9rbzpcnSU5o9fPngPaa+U5Y0ZMkRbH/KOdXtIxZd4ZZmjv8h1wUuY6gEy0cknr+TTS4q+s4OXrlOUNFmzee/lSRJxLW7zEdfXNWO36slzYplMmmMWYQuFs6KI51GeB6U2fRFBdbhnr4CJY2T7/1foU8LkwTNIaXe3Ftr34t9SrDSpQeYSTSKhuQaf3RR5/n7ePCuHgoqGP8U3UyUxSaKsdNVu9W1bPnNYNqQra4hP8EahguTsSkZzbaK94qS2L4oz4CcqFVxCsjm0ZwWwfvHQ5TPKAmGBd8L4mW7Yb6qPQZmhU4aRSGrMMGeQIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQsFAAOCAgEAXVn15XA/xnwkvbWOkPHEXJTlmYxKnv8eOctybWlOT7NNzqm9Kt1Bu2PtYPaKrvcBYKezT2DARsp2HJNmU/oGPFL2hDFqVac+FLuYfiWY1GBMiNtnOu9GqiPoualKq1UM4dUspuir6ccRf33glbi4m8al89Rz+vZSRSRL44iYWQ4p3w6kxEk23MT3R8eQG4pGEcHYfkUchibT1BUUex3alW1xH9BuST5zHh8zii+aWkCC/UP2mTomEmMf4vJc0xVtnoNb8lDvYNwCO4ZODc0pssO8QaC4kEmiSqOeGxghORGkvqd0joDZ2cnmQ8ilgWJ+RBVQzxny/hem3AQFzP5CGFgZQ+I6frMV97jZzPbOqnLKyjre6Fc+SjPN+ExfXM0FrGMxeeXMzBubrD8UkmG/OT5nZI7urqXVOywRYbQkMVf+19BLiuTYHctBTxjjQ7HNWz5SS2qeKzPvKL4Av7828hBsweRpi8+KVqnxToDzH0FPNiYDexLg/QQKF9Dh4ryEYoMc54YpfC3H/Q+GMmUeMLf43mv+4bcSFwnKEDswY38V4ooOP4v9IIK3z7YP9+Gk4Vu4+0kTQrI1KuIiRYCGEQPOLWi6WcYGUHHO9FDz5hV0cYsC81QbWelSSqxazrrhb9SnbtYRqlYzdpY+S9gecBx+JKvDArJTypgomMUer44="
+                      Sello="RILnRSvRpwQUDDZuOz8UwYoliTbUAhuhAgT4AUrUQotYE22oPxJuOGxokZ7Yuj30IgUrFRiiEjHM01CSQelqMWLYDwSwd6PbEBm12t5iLHM1hdlh/AMq/squUcTKxmdT0NGlC+8QCkDfK7aC/Dq5Dfhnl8THJgjnojEZ+2amE+wB/pq4U+5mmP4r6NUTchiLTL4mg8NXh/joZzrlNvfyqY+eJ3WDzMpw98kXylveveH1f83kus67PjeR5UbI4a80/VvI7O81CQ/OaYnpLymtYkmayl8mqMdNgWcFRRrI+0+DnRL3C6dwQRciScHAPHlA6M5SEiDEUM9Dkjr3HOyfrQ=="
+                      xmlns:OTRO="http://www.nosotros.com.mx/addendas"
+                      xmlns:adddomemi="http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioEmisor"
+                      xmlns:adddomexp="http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioExpedidoEn"
+                      xmlns:adddomrec="http://www.pegasotecnologia.com/secfd/Schemas/AddendaDomicilioReceptor">
+        <cfdi:Emisor Rfc="INT140702T34" Nombre="INTERTTIC" RegimenFiscal="601"/>
+        <cfdi:Receptor Rfc="CAEE721021CB7" Nombre="EDGAR CABRERA" UsoCFDI="G03" DomicilioFiscalReceptor="11320"
+                       RegimenFiscalReceptor="625"/>
+        <cfdi:Conceptos>
+            <cfdi:Concepto ClaveProdServ="52141523" NoIdentificacion="[232[232[232[" Cantidad="1" ClaveUnidad="H87"
+                           Unidad="Pieza" Descripcion="Smart Watch + Earphones smart Wristcase"
+                           ValorUnitario="462.962963" Importe="462.962963" ObjetoImp="02">
+                <cfdi:Impuestos>
+                    <cfdi:Traslados>
+                        <cfdi:Traslado Base="462.962963" Impuesto="003" TipoFactor="Tasa" TasaOCuota="0.080000"
+                                       Importe="37.037037"/>
+                    </cfdi:Traslados>
+                </cfdi:Impuestos>
+            </cfdi:Concepto>
+            <cfdi:Concepto ClaveProdServ="78102205" NoIdentificacion="[01Ship[ENVIO[ENVIO[" Cantidad="1"
+                           ClaveUnidad="E48" Unidad="Servicio" Descripcion="Gastos de Envío" ValorUnitario="107.407407"
+                           Importe="107.407407" ObjetoImp="02">
+                <cfdi:Impuestos>
+                    <cfdi:Traslados>
+                        <cfdi:Traslado Base="107.407407" Impuesto="003" TipoFactor="Tasa" TasaOCuota="0.080000"
+                                       Importe="8.592593"/>
+                    </cfdi:Traslados>
+                </cfdi:Impuestos>
+            </cfdi:Concepto>
+        </cfdi:Conceptos>
+        <cfdi:Impuestos TotalImpuestosTrasladados="45.63">
+            <cfdi:Traslados>
+                <cfdi:Traslado Impuesto="003" TipoFactor="Tasa" TasaOCuota="0.080000" Importe="45.63" Base="570.37"/>
+            </cfdi:Traslados>
+        </cfdi:Impuestos>
+        <cfdi:Complemento>
+            <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+                                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                     xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd"
+                                     Version="1.1" UUID="33A8E6D5-A716-43FE-83AA-B2C70006E4CE"
+                                     FechaTimbrado="2025-04-21T18:25:05" RfcProvCertif="PAC010101000"
+                                     SelloCFD="RILnRSvRpwQUDDZuOz8UwYoliTbUAhuhAgT4AUrUQotYE22oPxJuOGxokZ7Yuj30IgUrFRiiEjHM01CSQelqMWLYDwSwd6PbEBm12t5iLHM1hdlh/AMq/squUcTKxmdT0NGlC+8QCkDfK7aC/Dq5Dfhnl8THJgjnojEZ+2amE+wB/pq4U+5mmP4r6NUTchiLTL4mg8NXh/joZzrlNvfyqY+eJ3WDzMpw98kXylveveH1f83kus67PjeR5UbI4a80/VvI7O81CQ/OaYnpLymtYkmayl8mqMdNgWcFRRrI+0+DnRL3C6dwQRciScHAPHlA6M5SEiDEUM9Dkjr3HOyfrQ=="
+                                     NoCertificadoSAT="00000000000000000000"
+                                     SelloSAT="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="/>
+        </cfdi:Complemento>
+        <cfdi:Addenda>
+            <OTRO:AddendaEmisor>
+                <OTRO:RequestForPayment>
+                    <OTRO:FInterno>500</OTRO:FInterno>
+                    <OTRO:Ffacturar>500</OTRO:Ffacturar>
+                </OTRO:RequestForPayment>
+            </OTRO:AddendaEmisor>
+            <adddomemi:AddendaDomicilioEmisor calle="Lago Alberto 319, Piso 6-A" noExterior="Col Granada"
+                                              localidad="Miguel Hidalgo" municipio="Miguel Hidalgo"
+                                              estado="Ciudad de México" pais="México"
+                                              codigoPostal="11520"></adddomemi:AddendaDomicilioEmisor>
+            <adddomexp:AddendaDomicilioExpedidoEn calle="CIRCUNVALACION" noExterior="8" localidad="CIUDAD SATELITE"
+                                                  referencia="2022" municipio="NAUCALPAN DE JUAREZ" estado="MEXICO"
+                                                  pais="MEXICO" codigoPostal="53100"/>
+            <adddomrec:AddendaDomicilioReceptor calle="CALLE 1" noExterior="2" noInterior="3" colonia="COLONIAL"
+                                                localidad="MIGUEL HIDALGO" referencia="CALLE 6 Y CALLE 8"
+                                                municipio="MIGUEL HIDALGO" estado="CIUDAD DE MÉXICO" pais="MÉXICO"
+                                                codigoPostal="11320"></adddomrec:AddendaDomicilioReceptor>
+        </cfdi:Addenda>
+    </cfdi:Comprobante>
+</Order>

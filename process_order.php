@@ -214,10 +214,20 @@ file_put_contents($filename, $xmlString);
 
 //enviar por POST
 if ($sandbox_mode) {
-    $url_qmf = 'https://quieromifactura.mx/QA/web_services/servidorMarket.php';
+    $url_qmf = 'https://quieromifactura.mx/QA2/web_services/servidorMarket.php';
 }else{
     $url_qmf = 'https://quieromifactura.mx/PROD/web_services/servidorMarket.php';
 }
+$log->debug('Enviando XML a QMF URL: ' . $url_qmf);
+
+// Marca de tiempo antes de la petición
+$__t0 = microtime(true);
 
 $response = postXML($url_qmf, $xmlString);
+
+// Cálculo del tiempo transcurrido en milisegundos
+$__elapsedMs = (microtime(true) - $__t0) * 1000;
+
+// Registrar el resultado junto con el tiempo de respuesta
 $log->debug('Result POST a QMF: ' . print_r($response, true));
+$log->debug('Tiempo de respuesta QMF: ' . number_format($__elapsedMs, 2) . ' ms');

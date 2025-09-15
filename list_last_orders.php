@@ -21,7 +21,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Últimos Pedidos</h1>
-        <a href="index_old.php" class="text-blue-600 hover:underline">← Volver al Home</a>
+        <a href="preferences.php" class="text-blue-600 hover:underline">← Volver al Home</a>
     </div>
 
     <form id="ordersForm" method="post">

@@ -53,6 +53,7 @@ $result = $conn->query($sql);
 $log->debug("SQL query $sql");
 $log->debug("Select serial order: " . print_r($result, true));
 $row = $result->fetch_assoc();
+$sandbox_mode = $row["env_prod"] !=1;
 $prefix = $row['prefix_order'];
 $num_order = $row['order_serial'] + 1;
 $sql = "UPDATE shops SET order_serial = '$num_order' WHERE shop = '$shop'";
@@ -96,12 +97,28 @@ $shopify_id = $data['id'];
 $orderId = $data['order_number'] ?? 'TEST-ORDER';
 $date = new DateTime(date('Y-n-j', strtotime($data['processed_at'] ?? 'now')));
 $purchaseDate = $date->format('Y-m-d');
-$orderStatus = $data['fulfillment_status'] ?? 'Completed';
-$salesChannel = 'WooCommerce';
+$orderStatus = '';
+switch (strtolower($data['financial_status'])) {
+    case 'partially refund':
+    case 'paid':
+        $orderStatus = 'paid';
+        break;
+    case 'partially paid':
+    case 'pending':
+    case 'authorized':
+        $orderStatus = 'pending';
+        break;
+    case 'voided':
+    case 'refunded' :
+        $orderStatus = 'cancelled';
+        break;
+}
+
+$salesChannel = 'Shopify';
 $totalAmount = $data['total_price'] ?? '0.00';
 $currency = $data['currency'] ?? 'MXN';
 $email = $data['email'] ?? 'no-email@dummy.com';
-$buyerName = 'VENTAS AL PUBLICO EN GENERAL';
+$buyerName = mb_convert_encoding($data['customer']['first_name']??'' . $data['customer']['last_name']??'',"UTF-8", 'ISO-8859-1')?? 'VENTAS AL PUBLICO EN GENERAL';
 $usoCFDI = 'G03';
 $formaPago = '31';
 
@@ -134,19 +151,34 @@ $request->appendChild($order);
 $itemsResponse = $doc->createElement("ListOrderItemsResponse");
 $itemsResult = $doc->createElement("ListOrderItemsResult");
 $orderItems = $doc->createElement("OrderItems");
-
+$first_item = true;
 foreach ($data['line_items'] ?? [] as $item) {
+    $product_name = mb_convert_encoding($item['title'], "UTF-8", 'ISO-8859-1');
     $orderItem = $doc->createElement("OrderItem");
     $orderItem->appendChild($doc->createElement("ASIN", $item['sku'] ?: 'SIN-SKU'));
-    $orderItem->appendChild($doc->createElement("Title", $item['title']));
-    $orderItem->appendChild($doc->createElement("QuantityShipped", $item['quantity']));
+    $orderItem->appendChild($doc->createElement("Title", $product_name));
 
+    $tot_discount = 0.00;
+    if(!empty($item['discount_allocations'])){
+        foreach ($item['discount_allocations'] as $discount){
+            $tot_discount = $tot_discount +  $discount['amount'];
+        }
+    }
+    $orderItem->appendChild($doc->createElement("QuantityShipped", $item['quantity']));
     $itemPrice = $doc->createElement("ItemPrice");
-    $itemPrice->appendChild($doc->createElement("Amount", $item['price']*1.16));
+    $itemPrice->appendChild($doc->createElement("Amount", number_format($item['price'] * $item['quantity'] - $tot_discount, 2, '.', "")));
     $orderItem->appendChild($itemPrice);
 
     $shippingPrice = $doc->createElement("ShippingPrice");
-    $shippingPrice->appendChild($doc->createElement("Amount", "0.00"));
+    if ($first_item) {
+        $t = 0.0;
+        foreach ($data['shipping_lines'] ?? [] as $shipping_line) {
+            $t = $t + $shipping_line['price'];
+        }
+        $shippingPrice->appendChild($doc->createElement("Amount", number_format($t, 2, '.', '')));
+    }else{
+        $shippingPrice->appendChild($doc->createElement("Amount", "0.00"));
+    }
     $orderItem->appendChild($shippingPrice);
 
     $discount = $doc->createElement("PromotionDiscount");
@@ -181,26 +213,11 @@ file_put_contents($filename, $xmlString);
 
 
 //enviar por POST
-$response = postXML('https://quieromifactura.mx/QA2/web_services/servidorMarket.php', $xmlString);
-$log->debug('Result POST: ' . print_r($response, true));
+if ($sandbox_mode) {
+    $url_qmf = 'https://quieromifactura.mx/QA/web_services/servidorMarket.php';
+}else{
+    $url_qmf = 'https://quieromifactura.mx/PROD/web_services/servidorMarket.php';
+}
 
-// Enviar por SOAP
-/*try {
-    $client = new SoapClient("https://quieromifactura.mx/QA2/web_services/servidorMarket.php?wsdl", [
-        'trace' => true,
-        'exceptions' => true,
-        'cache_wsdl' => WSDL_CACHE_NONE,
-        'encoding' => 'ISO-8859-1'
-    ]);
-
-    $response = $client->__soapCall("RequestXMLCFDIimpuestos", [
-        new SoapVar($xmlString, XSD_ANYXML)
-    ]);
-
-    http_response_code(200);
-    $log->debug("✅ Enviado correctamente. Respuesta: " . $response);
-
-} catch (SoapFault $e) {
-    http_response_code(500);
-    $log->debug("❌ Error SOAP: " . $e->getMessage());
-}*/
+$response = postXML($url_qmf, $xmlString);
+$log->debug('Result POST a QMF: ' . print_r($response, true));

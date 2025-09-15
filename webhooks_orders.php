@@ -17,8 +17,11 @@ http_response_code(200);
 header("Content-Type: application/json");
 // extract info from Shopify
 switch ($h['X-Shopify-Topic']) {
+    //todo: agregar funcionalidad cambios, devoluciones, cancelaciones
     case 'orders/paid':
-        $log->info("Processing orders/paid");
+    case 'orders/cancelled':
+    case 'orders/fulfilled':
+        $log->info("Processing {$h['X-Shopify-Topic']}");
         $data = json_decode($data, true);
         $log->debug("Before " . __FILE__);
         include_once "process_order.php";

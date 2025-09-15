@@ -4,28 +4,35 @@ require_once "vendor/autoload.php";
 require_once "includes/utils.php";
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-global $conn, $client_id, $shop;
+global $conn, $client_id, $shop, $log;
 
-//$shop = $_GET['shop'];
+$shop = $_GET['shop'];
 
+$log = new Logger('shopify-qmf4');
+$log->pushHandler(new StreamHandler('logs/shopify-qmf4.log'));
+$log->setTimezone(new \DateTimeZone('America/Mexico_City'));
+
+$log->debug("Shop: $shop");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-/*    $stmt = $conn->prepare("UPDATE shops SET qmf4_user = ?, rfc = ? WHERE shop = ?");
+    $log->debug('preferences POST: ' . print_r($_POST, true));
+    $env_prod = (isset($_POST['env_prod']) && $_POST['env_prod'] === 'production') ? 1 : 0;
+    $stmt = $conn->prepare("UPDATE shops SET qmf4_user = ?, rfc = ?, env_prod= ? WHERE shop = ?");
 
     $stmt->execute([
-        $_POST['qmf4_user'],
+        $_POST['usuario'],
         $_POST['rfc'],
-        $shop_domain
-    ]);*/
+        $env_prod,
+        $shop
+    ]);
 
+    $log->debug('SQL Result: ' . $conn->error);
     $mensaje = "Configuración guardada correctamente.";
 }
 
 $sql = "SELECT * from shops WHERE shop = '$shop' and uninstalled IS NULL";
 $result = $conn->query($sql);
-//echo $sql .'<br>';
-//echo "Result SQL: " . print_r($result, true) . '<br>';
 $row = $result->fetch_assoc();
-//echo "Result SQL: " . print_r($row, true) . '<br>';
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -59,7 +66,24 @@ $row = $result->fetch_assoc();
                 <input type="text" name="rfc" value="<?= htmlspecialchars($row['rfc'] ?? '') ?>" class="w-full mt-1 p-2 border rounded shadow-sm">
             </div>
 
-
+            <!-- Switch para entorno -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Entorno</label>
+                <div class="flex space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="env_prod" value="sandbox"
+                            <?= (($row['env_prod'] ?? '0') == '0' ? 'checked' : '') ?>
+                               class="form-radio h-4 w-4 text-blue-600">
+                        <span class="ml-2">Sandbox</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="env_prod" value="production"
+                            <?= (($row['env_prod'] ?? '0') === '1' ? 'checked' : '') ?>
+                               class="form-radio h-4 w-4 text-blue-600">
+                        <span class="ml-2">Producción</span>
+                    </label>
+                </div>
+            </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Uso de CFDI</label>

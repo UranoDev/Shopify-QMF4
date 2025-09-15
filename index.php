@@ -1,138 +1,187 @@
 <?php
-
 require_once "includes/mysql.php";
-require_once "includes/utils.php";
 require_once "vendor/autoload.php";
+require_once "includes/utils.php";
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-global $conn, $client_id, $shop;
 
+// Shopify invoke this one with query
+/*
+ hmac = 600b23e98e63b7910594341a57efb77665600206d3c818db1f76b9788ccb16a6
+host = admin.shopify.com/store/qmfdemo02
+shop = qmfdemo02.myshopify.com
+timestamp = 1742255269
+HMAC validation passed from qmfdemo02.myshopify.com
+*/
 
-$shop = $_GET['shop'];
+include "html/header.php";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    /*    $stmt = $conn->prepare("UPDATE shops SET qmf4_user = ?, rfc = ? WHERE shop = ?");
-
-        $stmt->execute([
-            $_POST['qmf4_user'],
-            $_POST['rfc'],
-            $shop_domain
-        ]);*/
-
-    $mensaje = "Configuración guardada correctamente.";
-}
-
-$sql = "SELECT * from shops WHERE shop = '$shop' and uninstalled IS NULL";
-$result = $conn->query($sql);
-//echo $sql .'<br>';
-//echo "Result SQL: " . print_r($result, true) . '<br>';
-$row = $result->fetch_assoc();
-//echo "Result SQL: " . print_r($row, true) . '<br>';
+global $client_secret;
+global $conn;
 
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuración de Integración</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-8">
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Configuración de Integración</h1>
+    <header>Quiero Mi Factura V4</header>
+<?php
+$log = new Logger('shopify-qmf4');
+$log->pushHandler(new StreamHandler('logs/shopify-qmf4.log'));
+$log->setTimezone(new \DateTimeZone('America/Mexico_City'));
+$log->error("Inicio");
 
-    <form class="space-y-6">
-        <!-- Campo de Usuario -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
-            <input type="text"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Ingrese su usuario"
-                   required
-            value="<?=$row['qmf4_user'];?>">
-        </div>
+//Validations
+if (!isset($_GET['hmac'])){
+    $log->debug("Hola.Esta App debe ser invocada desde Shopify");
+    ?>
+    <div class="alert">
+        <dl>
+            <dt>Esta App debe ser invocada desde Shopify (-hmac)</dt>
+        </dl>
+    </div>
+<?php
+    //die();
+}
+echo "Checnado hmac...<br>";
+if (!check_hmac($client_secret)){
+    $log->debug("El HMAC no coincide.");
+    ?>
+    <div class="alert">
+        <dl>
+            <dt>El HMAC no coincide.</dt>
+        </dl>
+    </div>
+<?php
+    //die();
+}
+echo "empezamos...<br>";
+$log->debug("empezamos...");
+$shop = $_GET['shop'];
+$token = '';
+$sql = "SELECT * from shops WHERE shop = '$shop' and uninstalled IS NULL";
+$log->debug($sql);
+$result = $conn->query($sql);
+$row = null;
+$RFC_emisor = '';
+$user_qmf4 = '';
+$cp_sucursal = '';
+if ($result->num_rows == 1) {
+    $row = $result->fetch_assoc();
+    $log->debug("Tienda encontrada en DB: {$row['shop']}<br>");
+    $token = $row['token'];
+    $shop = $row['shop'];
+    $RFC_emisor = $row['rfc'];
+    $user_qmf4 = $row["qmf4_user"];
+    $cp_sucursal = $row["qmf4_suc"];
+    $sandbox_mode = $row["env_prod"] !==1;
+}
+$log->debug(print_r($result, true));
+if (!$result || ($result->num_rows ==0)) {
+    $log->debug("Redirecting to Install...");
+    header('Location: install.php?shop='.$shop);
+    exit;
+}
+echo "Empezamos...";
 
-        <!-- Campo RFC -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">RFC</label>
-            <input type="text"
-                   pattern="^[A-ZÑ&]{3,4}\d{6}[A-V1-9][0-9A-Z]([0-9A])?$"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 uppercase"
-                   placeholder="Ingrese su RFC"
-                   required
-                   value="<?=$row['rfc'] ?>"
-            >
-        </div>
+/*
+ * Register webhooks
+ */
+/*$qry = '{"webhook": {"topic": "orders/paid", "address": "https://qmf002.urano.dev/webhooks_orders.php", "format": "json"}}';
+$response = shopify_call($token, $shop, "/admin/api/2024-10/webhooks.json", json_decode($qry,true), 'POST');
+$log->debug("Respuesta suscribir a Webhook (orders/paid): ", $response);
 
-        <!-- Código Postal -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Código Postal</label>
-            <input type="number"
-                   maxlength="5"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                   placeholder="Ingrese su CP"
-                   required
-                   value="<?=$row['qmf4_suc'];?>"
-            >
-        </div>
+$qry = '{"webhook": {"topic": "orders/updated", "address": "https://qmf002.urano.dev/webhooks_orders.php", "format": "json"}}';
+$response = shopify_call($token, $shop, "/admin/api/2024-10/webhooks.json", json_decode($qry,true), 'POST');
+$log->debug("Respuesta suscribir a Webhook (orders/paid): ", $response);*/
 
-        <!-- Uso CFDI -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Uso CFDI</label>
-            <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                <option value="">Seleccione una opción</option>
-                <option value="G03">G03 - Gastos en general</option>
-                <option value="P01">P01 - Por definir</option>
-                <option value="G01">G01 - Adquisición de mercancías</option>
-                <option value="D01">D01 - Honorarios médicos</option>
-            </select>
-        </div>
+//TODO: Agregar webhooks para cambios en pedidos: devoluciones, cancelaciones, cambios
+// Crear webhook usando GraphQL
+$mutation = <<<GRAPHQL
+mutation {
+  webhookSubscriptionCreate(
+    topic: ORDERS_PAID
+    webhookSubscription: {
+      callbackUrl: "https://qmf002.urano.dev/webhooks_orders.php"
+      format: JSON
+    }
+  ) {
+    webhookSubscription {
+      id
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+GRAPHQL;
 
-        <!-- URL Sandbox -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">URL Sandbox</label>
-            <div class="flex rounded-md shadow-sm">
-                <input type="text"
-                       value="https://quieromifactura.mx/QA2/web_services/servidorMarket.php?wsdl"
-                       class="flex-1 block w-full rounded-none rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-100"
-                       readonly>
-<!--                <button type="button"
-                        class="inline-flex items-center px-3 rounded-r-md bg-gray-200 text-gray-600 hover:bg-gray-300 copy-btn"
-                        data-clipboard-text="https://quieromifactura.mx/PROD/web_services/servidorMarket.php?wsdl">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                </button>
--->            </div>
-        </div>
+$response = shopify_graphql_call($token, $shop, $mutation);
+$log->debug("Respuesta suscribir graphql a Webhook (orders/paid): ", $response);
 
-        <!-- URL Producción -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">URL Producción</label>
-            <div class="flex rounded-md shadow-sm">
-                <input type="text"
-                       value="https://api.production.example.com/v1"
-                       class="flex-1 block w-full rounded-none rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-100"
-                       readonly>
-                <!--<button type="button"
-                        class="inline-flex items-center px-3 rounded-r-md bg-gray-200 text-gray-600 hover:bg-gray-300 copy-btn"
-                        data-clipboard-text="https://api.production.example.com/v1">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                </button>-->
+$mutation = <<<GRAPHQL
+mutation {
+  webhookSubscriptionCreate(
+    topic: ORDERS_UPDATED
+    webhookSubscription: {
+      callbackUrl: "https://qmf002.urano.dev/webhooks_orders.php"
+      format: JSON
+    }
+  ) {
+    webhookSubscription {
+      id
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+GRAPHQL;
+
+$response = shopify_graphql_call($token, $shop, $mutation);
+$log->debug("Respuesta suscribir graphql a Webhook (orders/paid): ", $response);
+
+$url_sandbox = "http://quieromifactura.mx/QA2/web_services/servidorMarket.php?wsdl";
+$url_prod = "https://quieromifactura.mx/PROD/web_services/servidorMarket.php?wsdl";
+$log->debug("Start of page");
+?>
+    <article>
+        <div class="card has-sections columns six">
+            <div class="card-section align-left">
+                <?php
+                $result = shopify_call ($token, $shop, '/admin/api/2025-04/webhooks.json');
+                $log->debug("call of webhooks" . print_r($result,true));
+                echo "<br>Usuario de Quiero mi Factura: $user_qmf4<br>";
+                echo '(IP server: ' . $_SERVER['REMOTE_ADDR'] . ')<br>';
+                echo "RFC del Emisor: $RFC_emisor<br>";
+                echo "CP Sucursal: $cp_sucursal<br>";
+                echo "URL Sandbox: $url_sandbox<br>";
+                echo "Sandbox Mode: $sandbox_mode, using URL: " . ($sandbox_mode ? $url_sandbox : $url_prod) . "<br>";
+                echo "URL Prod: $url_prod<br>";
+                echo "Token: $token<br>";
+                $r = json_decode($result['response'], true);
+                $n = count($r['webhooks']);
+                if ($n){
+                    echo "Webhooks procesando: $n <br>";
+                    foreach ($r['webhooks'] as $webhook) {
+                        echo "{$webhook['id']}, {$webhook['topic']}, {$webhook['address']} <br>";
+                    }
+                } else {
+                    echo 'No webhook registered';
+                }
+                ?>
             </div>
         </div>
+    </article>
 
-        <!-- Botón de Envío -->
-        <div class="pt-4">
-            <button type="submit"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Guardar Configuración
-            </button>
-        </div>
-    </form>
-</div>
-</body>
-</html>
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md text-center">
+        <h1 class="text-2xl font-bold mb-4">Bienvenido a tu App CFDI</h1>
+        <p class="mb-6 text-gray-600">Aquí podrás configurar los datos fiscales de tu tienda.</p>
+
+        <a href="preferences.php?shop=<?= urlencode($shop) ?>&host=<?= urlencode($_GET['host']) ?>"
+           class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition">
+            Configuración CFDI
+        </a>
+    </div>
+<?php
+
+
+include "html/footer.php";

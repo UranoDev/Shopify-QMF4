@@ -6,7 +6,9 @@ $limit = 10;
 // Configuración de App Bridge
 $shop = $_GET['shop'];
 $host = $_GET['host'] ?? '';
-$api_key = 'bb1676b724383d143f714c00ca67e2e4'; // Reemplazar con tu API key
+$api_key = 'bb1676b724383d143f714c00ca67e2e4'; // Reemplazar con tu API key qmf4
+$api_key = 'a1612c6cb5cb2242a13299267cf896ec'; // Reemplazar con tu API key qmf priv
+
 
 // Función para extraer page_info
 function extract_page_info($url) {
@@ -42,7 +44,7 @@ function extract_page_info($url) {
                                 <ul class="Polaris-Navigation__List">
                                     <li class="Polaris-Navigation__ListItem">
                                         <a class="Polaris-Navigation__Item"
-                                           href="<?php echo getAppUrl('index_old.php'); ?>"
+                                           href="<?php echo getAppUrl('preferences.php'); ?>"
                                            data-polaris-unstyled="true">
                                             <span class="Polaris-Navigation__Icon">
                                                 <span class="Polaris-Icon">
@@ -108,7 +110,7 @@ function extract_page_info($url) {
                 primary: {
                     content: 'Regresar',
                     onClick: () => {
-                        window.location.href = '<?php echo getAppUrl('index_old.php'); ?>';
+                        window.location.href = '<?php echo getAppUrl('preferences.php'); ?>';
                     }
                 }
             }

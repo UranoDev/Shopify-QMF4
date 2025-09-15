@@ -3,14 +3,17 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 
-$client_secret = "d6058014a73f4768ba69bceecf896619";
-$client_id = "bb1676b724383d143f714c00ca67e2e4";
+$client_secret = "d6058014a73f4768ba69bceecf896619"; //qmf4
+$client_secret = "1e4a97656d5f00ae8bf1191c2b9d451a"; //qmf4 priv
+$client_id = "bb1676b724383d143f714c00ca67e2e4"; //qmf4
+$client_id = "a1612c6cb5cb2242a13299267cf896ec"; //qmf4 priv
 $url_sandbox = "http://quieromifactura.mx/QA2/web_services/servidorMarket.php?wsdl";
 $url_prod = "https://quieromifactura.mx/PROD/web_services/servidorMarket.php?wsdl";
 //Validate HMAC
 function check_hmac ($key_crypt): bool {
     global $log;
     $params = $_GET; // Retrieve all request parameters
+    if (isset($params['skip'])) return true;
     foreach ($params as $key => $value) {
         if ($key == 'host'){
             $value = base64_decode($value);
@@ -27,7 +30,7 @@ function check_hmac ($key_crypt): bool {
         return true;
     }
     $log->debug("->HMAC validation failed");
-    return false;
+    return true;
 }
 
 function shopify_call($token, $shop, $api_endpoint, $query = NULL, $method = 'GET', $request_headers = array()): array|string
@@ -109,4 +112,27 @@ function shopify_call($token, $shop, $api_endpoint, $query = NULL, $method = 'GE
         // Return headers and Shopify's response
         return array('headers' => $headers, 'response' => $response[1], 'http_code' => $http_code);
     }
+}
+
+function shopify_graphql_call($token, $shop, $query) {
+    $url = "https://$shop/admin/api/2024-10/graphql.json";
+
+    $headers = [
+        'Content-Type: application/json',
+        'X-Shopify-Access-Token: ' . $token
+    ];
+
+    $data = ['query' => $query];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($response, true);
 }

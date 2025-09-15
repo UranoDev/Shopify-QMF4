@@ -7,10 +7,11 @@ $log = new Logger('shopify-qmf4');
 $log->pushHandler(new StreamHandler('logs/shopify-qmf4.log'));
 $log->setTimezone(new \DateTimeZone('America/Mexico_City'));
 
-$API_KEY = 'bb1676b724383d143f714c00ca67e2e4'; //Client ID
+$API_KEY = 'bb1676b724383d143f714c00ca67e2e4'; //Client ID qmf4
+$API_KEY = 'a1612c6cb5cb2242a13299267cf896ec'; //Client ID qmf priv
 $shop = $_GET['shop'];
 //https://shopify.dev/docs/api/usage/access-scopes
-$scopes = "read_products,write_products,read_orders, write_orders,read_metaobjects, write_metaobjects, read_metaobject_definitions, write_metaobject_definitions";
+$scopes = "read_products,write_products,read_orders, read_all_orders, write_orders,read_metaobjects, write_metaobjects, read_metaobject_definitions, write_metaobject_definitions";
 
 $redirect_uri = 'https://'.$_SERVER['HTTP_HOST']. "/token.php";
 try {

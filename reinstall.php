@@ -20,9 +20,9 @@ $row = $result->fetch_assoc();
 echo "Result SQL: " . print_r($row, true) . '<br>';
 
 //https://shopify.dev/docs/api/usage/access-scopes
-$scopes = "read_customers, read_products,write_products,read_orders, write_orders,read_metaobjects, write_metaobjects, read_metaobject_definitions, write_metaobject_definitions";
+$scopes = "read_customers, read_products,write_products,read_all_orders, read_orders, write_orders,read_metaobjects, write_metaobjects, read_metaobject_definitions, write_metaobject_definitions";
 
-$redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].'/index.php';
+$redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].'/index_after.php';
 try {
     $nonce = bin2hex(random_bytes(12));
 } catch (\Random\RandomException $e) {

@@ -4,6 +4,8 @@
       "ext-curl": "*",
       "ext-dom": "*",
       "ext-soap": "*",
-      "ext-simplexml": "*"
+      "ext-simplexml": "*",
+      "ext-mbstring": "*",
+      "ext-libxml": "*"
     }
 }

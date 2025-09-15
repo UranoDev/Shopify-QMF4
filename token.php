@@ -16,6 +16,7 @@ global $client_id;
 global $conn;
 
 if (check_hmac($client_secret)){
+
     $token_endpoint = "https://" . $_GET['shop'] . "/admin/oauth/access_token";
     $var = array("client_id" => $client_id,
         "client_secret" => $client_secret,
@@ -50,9 +51,10 @@ if (check_hmac($client_secret)){
     $access_token = $response['access_token'];
     $hmac = $_GET['hmac'];
     $sql = "INSERT INTO shops (shop, token, hmac, nonce, api_key) VALUES ('$shop', '$access_token', '$hmac' , '', '') ON duplicate key update token = '$access_token', hmac='$hmac'";
+    $log->debug("SQL: " . $sql);
     $result = $conn->query($sql);
+    $log->error("Error SQL: " . $conn->error);
     if ($result) {
         header('Location: https://' . $shop . "/admin/apps");
     }
-
 }

@@ -27,7 +27,7 @@ if (!isset($_GET['host'])) {
                     <span class="text-xl font-bold text-blue-600">Quiero Mi Factura App Shopify</span>
                 </div>
                 <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                    <a href="index_old.php?shop=<?= urlencode($shop_domain) ?>&host=<?= urlencode($_GET['host']) ?>" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600">
+                    <a href="preferences.php?shop=<?= urlencode($shop_domain) ?>&host=<?= urlencode($_GET['host']) ?>" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600">
                         Home
                     </a>
                     <a href="preferences.php?shop=<?= urlencode($shop_domain) ?>&host=<?= urlencode($_GET['host']) ?>" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600">

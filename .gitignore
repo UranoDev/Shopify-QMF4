@@ -5,6 +5,8 @@
 /vendor
 .env
 .env.backup
+.env.local
+.env*
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json
@@ -20,3 +22,6 @@ BUT0_BUT040323MY1
 *.Log
 *.xml
 *.json
+*.csv
+.idea
+composer.lock

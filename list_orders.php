@@ -8,6 +8,7 @@ $shop = $_GET['shop'];
 $host = $_GET['host'] ?? '';
 $api_key = 'bb1676b724383d143f714c00ca67e2e4'; // Reemplazar con tu API key qmf4
 $api_key = 'a1612c6cb5cb2242a13299267cf896ec'; // Reemplazar con tu API key qmf priv
+$api_key = getenv('SHOPIFY_API_KEY');
 
 
 // Función para extraer page_info

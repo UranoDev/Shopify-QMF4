@@ -113,6 +113,12 @@ switch (strtolower($data['financial_status'])) {
         $orderStatus = 'cancelled';
         break;
 }
+if (isset($orderData['closed_at'])){
+    $orderStatus = 'completed';
+}
+if (isset($orderData['cancelled_at'])){
+    $orderStatus = 'cancelled';
+}
 
 $salesChannel = 'Shopify';
 $totalAmount = $data['total_price'] ?? '0.00';

@@ -1,11 +1,12 @@
 {
     "require": {
-        "monolog/monolog": "^3.8",
+      "monolog/monolog": "^3.8",
       "ext-curl": "*",
       "ext-dom": "*",
       "ext-soap": "*",
       "ext-simplexml": "*",
       "ext-mbstring": "*",
-      "ext-libxml": "*"
+      "ext-libxml": "*",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

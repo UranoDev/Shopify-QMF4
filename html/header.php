@@ -1,4 +1,4 @@
-<?php global $client_id, $shop; ?>
+<?php global $shop; ?>
 <!DOCTYPE html>
 <html>
 <head>

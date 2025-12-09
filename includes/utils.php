@@ -3,10 +3,21 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 
-$client_secret = "d6058014a73f4768ba69bceecf896619"; //qmf4
-$client_secret = "1e4a97656d5f00ae8bf1191c2b9d451a"; //qmf4 priv
-$client_id = "bb1676b724383d143f714c00ca67e2e4"; //qmf4
-$client_id = "a1612c6cb5cb2242a13299267cf896ec"; //qmf4 priv
+//$client_secret = "d6058014a73f4768ba69bceecf896619"; //qmf4
+//$client_secret = "1e4a97656d5f00ae8bf1191c2b9d451a"; //qmf4 priv
+//$client_id = "bb1676b724383d143f714c00ca67e2e4"; //qmf4
+//$client_id = "a1612c6cb5cb2242a13299267cf896ec"; //qmf4 priv
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '../');
+$dotenv->load();
+$dotenv->required([
+    'SHOPIFY_CLIENT_ID',
+    'SHOPIFY_CLIENT_SECRET'
+]);
+
+$client_secret = $_ENV['SHOPIFY_CLIENT_SECRET'];
+$client_id = $_ENV['SHOPIFY_CLIENT_ID'];
+
 $url_sandbox = "http://quieromifactura.mx/QA2/web_services/servidorMarket.php?wsdl";
 $url_prod = "https://quieromifactura.mx/PROD/web_services/servidorMarket.php?wsdl";
 //Validate HMAC
@@ -32,6 +43,45 @@ function check_hmac ($key_crypt): bool {
     $log->debug("->HMAC validation failed");
     return true;
 }
+
+
+/**
+ * Validate Shopify webhook HMAC
+ * For webhooks, Shopify sends HMAC in X-Shopify-Hmac-Sha256 header
+ * calculated from the raw POST body
+ */
+function validate_webhook_hmac(string $data, array $headers, Logger $log): bool {
+    global $client_secret;
+
+    // Get HMAC from header (case-insensitive)
+    $hmac_header = null;
+    foreach ($headers as $key => $value) {
+        if (strtolower($key) === 'x-shopify-hmac-sha256') {
+            $hmac_header = $value;
+            break;
+        }
+    }
+
+    if (!$hmac_header) {
+        $log->error("Missing X-Shopify-Hmac-Sha256 header");
+        return false;
+    }
+
+    // Calculate HMAC using the raw POST data and client secret
+    $calculated_hmac = base64_encode(hash_hmac('sha256', $data, $client_secret, true));
+
+    // Compare HMACs using timing-attack-safe comparison
+    if (hash_equals($calculated_hmac, $hmac_header)) {
+        $log->debug("Webhook HMAC validation passed");
+        return true;
+    }
+
+    $log->error("Webhook HMAC validation failed");
+    $log->debug("Expected: " . $calculated_hmac);
+    $log->debug("Received: " . $hmac_header);
+    return false;
+}
+
 
 function shopify_call($token, $shop, $api_endpoint, $query = NULL, $method = 'GET', $request_headers = array()): array|string
 {

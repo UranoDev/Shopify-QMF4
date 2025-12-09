@@ -16,7 +16,12 @@ HMAC validation passed from qmfdemo02.myshopify.com
 
 include "html/header.php";
 
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 global $client_secret;
+$client_secret = $_ENV['CLIENT_SECRET'];
 global $conn;
 
 ?>

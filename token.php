@@ -12,6 +12,11 @@ $log->setTimezone(new DateTimeZone('America/Mexico_City'));
 $log->debug('Iniciando Token');
 
 global $client_secret;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$client_secret = $_ENV['CLIENT_SECRET'];
+
 global $client_id;
 global $conn;
 

@@ -8,6 +8,11 @@ use Monolog\Handler\StreamHandler;
 include "html/header.php";
 
 global $client_secret;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$client_secret = $_ENV['CLIENT_SECRET'];
+
 global $conn;
 
 $log = new Logger('shopify-qmf4');

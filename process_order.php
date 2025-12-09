@@ -113,7 +113,7 @@ switch (strtolower($data['financial_status'])) {
         $orderStatus = 'cancelled';
         break;
 }
-if (isset($orderData['closed_at'])){
+if (isset($orderData['closed_at']) && $orderStatus != 'cancelled'){
     $orderStatus = 'completed';
 }
 if (isset($orderData['cancelled_at'])){

@@ -3,6 +3,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/logs
+/unbranded
 .env
 .env.backup
 .env.local
@@ -24,4 +26,5 @@ BUT0_BUT040323MY1
 *.json
 *.csv
 .idea
+*.toml
 composer.lock

@@ -11,6 +11,7 @@ $log->pushHandler(new StreamHandler('logs/shopify-qmf4.log'));
 $log->setTimezone(new \DateTimeZone('America/Mexico_City'));
 
 $API_KEY = $client_id; //Client ID
+$API_KEY = $_ENV('CLIENT_SECRET');
 $shop = $_GET['shop'];
 $sql = "SELECT * from shops WHERE shop = '$shop'";
 $result = $conn->query($sql);
